@@ -253,6 +253,41 @@ cockpit: Room 'Cockpit' 'cockpit'
 ;
 
 + windscreen: Fixture 'windscreen;; window windshield'
+    desc()
+    {
+        if(takeoff.isHappening)
+            takeoffDesc();
+        else
+            "The light is starting to fade outside, but you can easily makeout
+            the terminal off to the port side and the last-minute bustle of
+            preparations around your plane. ";            
+    }
+    
+    takeoffDesc()
+    {
+        local dt = takeoff.distanceTraveled/5;
+        
+        "It's now quite dark outside, but you can see the landing lights marking
+        the course of the runway <<if asi.airspeed == 0>>stationery on either
+        side<<else if asi.airspeed < 30>> moving slowly past <<else>> rushing
+        past<<end>>. <<if dt < 10>> Virtually the whole length of the runway
+        stretches ahead of you<<else if dt < 33>> Most of the runway still lies
+        ahead<< else if dt < 67>> So far as you can judge only about half the
+        runway still lies ahead<<else if dt < 85>> You're starting to run out of
+        runway<<else>> You're nearly at the end of the runway<<end>>.";
+    }
+    
+    
+    dobjFor(LookThrough) asDobjFor(Examine)
+;
+
++ terminalBuilding: Distant 'terminal building; shabby white large; structure'
+    "It's a large white structure just off to port. In the fading light you
+    can't really make out how shabby it actually looks. "
+;
+
+landingLights: Distant 'landing lights; red green;;them'
+    "The red lights are to port and the greens ones to starboard. "
 ;
 
 takeoff: Scene
@@ -260,7 +295,10 @@ takeoff: Scene
     
     whenStarting()
     {
-        "You taxi the plane to the start of Runway 2. ";
+        "A few moments later a truck tows your plane away from the jetway, and
+        following the instructions from the control tower, you taxi the plane to 
+        the start of Runway 2 just as the sun finally disappears below the
+        horizon. About a minute later, you are cleared for take-off. ";
         
         /* reset all controls to their initial positions */
         thrustLever.curSetting = '0';
@@ -271,6 +309,9 @@ takeoff: Scene
         
         planeFront.port = 'You can\'t leave the plane now it\'s left the jetway.
             ';
+        
+        landingLights.moveInto(cockpit);
+        terminalBuilding.moveInto(nil);
     }
     
     /* The total distance traveled along the runway */
@@ -284,7 +325,14 @@ takeoff: Scene
         {
             if(asi.airspeed >= 115)
             {
-                "The aircraft leaves the ground and continues up into the sky. ";
+                "The aircraft leaves the ground and continues up into the sky,
+                climbing rapidly above the city. Once you've gained enough
+                height you turn the plane --- not south towards Bogota but north
+                towards Miami. Hopefully those hoodlums back in passenger cabin
+                won't notice, though, at least, not until it's far too late. You
+                reach for the radio to call ahead and arrange a suitable
+                reception committee, and then settle back in your seat, content
+                with a job well done. ";
                 
                 finishGameMsg(ftVictory, [finishOptionUndo]);
             }
@@ -307,16 +355,15 @@ takeoff: Scene
         if(asi.airspeed < 0)
             asi.airspeed = 0;
         
-        distanceTraveled += ((asi.airspeed + oldSpeed)/2);
-        
+        distanceTraveled += ((asi.airspeed + oldSpeed)/2);        
        
         
+        /* The following commented-out lines were for testing purposes only */
+//         "The aircraft has covered <<distanceTraveled>>m and is now travelling at
+//        <<asi.airspeed>> knots. ";   
         
-         "The aircraft has covered <<distanceTraveled>>m and is now travelling at
-        <<asi.airspeed>> knots. ";   
         
-        
-        /* If we go to far, we run off the end of the runway */
+        /* If we go too far, we run off the end of the runway */
         if(distanceTraveled > 500)
         {
             "The plane reaches the end of the runway, ploughs through the fences
@@ -359,10 +406,7 @@ takeoff: Scene
             "The plane comes to a halt. ";
         else if(asi.airspeed < oldSpeed)
             "The plane is losing speed. ";
-    }
-    
-   
-    
+    }   
 ;
 
 
