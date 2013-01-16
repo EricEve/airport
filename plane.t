@@ -57,7 +57,8 @@ cockpit: Room 'Cockpit' 'cockpit'
     
     position = 0
     
-    positionDesc = ['pulled back', 'vertical', 'pushed forward'][position + 2]
+    positionDesc = ['pulled right back', 'vertical', 
+        'pushed all the way forward'][position + 2]
     
     dobjFor(Push)
     {
