@@ -86,6 +86,8 @@ ticketArea: Room 'Ticket Area' 'ticket area'
     plausibleLockList = [securityDoor]
     
     bulk = 1
+    
+    dobjFor(ShowTo)   {  preCond = [objHeld]   }
 ;
 
 +++ Fixture 'magnetic stripe; mag metallic brown; strip'
@@ -141,7 +143,9 @@ securityGate: Room 'Security Gate' 'security gate'
         "The metal detector buzzes furiously as you pass through it. The
         security guard beckons you back immediately, with a pointed
         tap of his holstered pistol. After a brisk search, he discovers the ID
-        card and takes it off you with a disapproving shake of his head. ";
+        card and takes it off you with a disapproving shake of his head,
+        before handing it to a colleague who walks off with it. <.reveal
+        card-confiscated> ";
         
         IDcard.moveInto(counter);
     }
@@ -584,7 +588,10 @@ securityCentre: Room 'Security Centre' 'security centre'
 ;
 
 tFrenchRevolution: Topic 'french revolution';
-tFlightDepartures: Topic 'flight departures; plane; times';
+tFlightDepartures: Topic '() flight departures; plane; times';
+tPilot: Topic 'pilot';
+tDoingTonight: Topic 'she\'s doing tonight; she is you are';
+tEnjoyWork: Topic 'she enjoys her work; you enjoy your like likes; job';
 
 VerbRule(GoogleFor)
     'google' ('for'|) topicIobj 'on' singleDobj
