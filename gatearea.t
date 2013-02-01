@@ -26,6 +26,8 @@ gateArea: Room 'Gate Area' 'gate area'
     otherSide = mrDoorOut
     lockability = lockableWithKey
     isLocked = true
+    
+    lockedMsg = (inherited + '<.reveal maintenance-door-locked>')
 ;
 
 + Distant 'display board'
@@ -184,6 +186,11 @@ jetway: Room 'Jetway' 'jetway;short enclosed; walkway'
         }
     }
     
+    travelerEntering(traveler, dest) 
+    {
+        if(traveler == me && takeover.isHappening)
+            escapeAchievement.awardPointsOnce();
+    }    
 ;
 
 announcementObj: ShuffledEventList

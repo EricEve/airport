@@ -19,16 +19,18 @@ versionInfo: GameID
 gameMain: GameMainDef
     /* Define the initial player character; this is compulsory */
     initialPlayerChar = me
-//    paraBrksBtwnSubcontents = nil
+    paraBrksBtwnSubcontents = nil
     
     showIntro()
     {
-//        local obj = ticket;
-//        gMessageParams(obj);
-//        "{I} need {an obj}. ";
-    }
-
-        
+       "<font size=+2><b>Airport</b></font>\b
+       They're out to get you. No, they really are --- <q>they</q> being the
+       local drug barons. You've just got the evidence that will put them behind
+       bars for the rest of the century, and now you're desperate to leave with
+       it while you still can, since El Diablo and his henchmen will be equally
+       desperate to stop you --- for good. They've pursued you as far as the
+       airport and now your only hope is to get the first plane out of here.\b";
+    }       
 ;
 
 
@@ -56,6 +58,10 @@ terminal: Room 'Terminal' 'terminal'
  */
 
 + me: Thing 'you'   
+    "Secret agents are normally meant to be well equipped, but your quick
+    getaway just now meant you had to leave just about everything behind
+    except what you're wearing, and that's not much. You couldn't even go back
+    to pick up your wallet or your credit card. "
     isFixed = true    
     proper = true
     ownsContents = true
@@ -159,11 +165,11 @@ securityGate: Room 'Security Gate' 'security gate'
     }
 ;
 
-+ Decoration 'power cable; trailing; cord wire wires'
++ powerCable: Decoration 'power cable; trailing; cord wire wires'
     "The cable trails rather slackly from one side of the metal detector across
-    the floor and then out of sight behind a desk. You're not sure it's an
-    arrangement that would find favour with health and safety inspectors back
-    home, but it appears to do the job. "
+    the floor and then out of sight behind a desk over to the right on the far
+    side. You're not sure it's an arrangement that would find favour with health
+    and safety inspectors back home, but it appears to do the job. "
     
     notImportantMsg = 'You\'re morally certain the security guard won\'t let you
         get anywhere near it. '
@@ -316,7 +322,15 @@ ticket: Thing 'ticket'
     useSpecialDesc = (location == getOutermostRoom)
     
     bulk = 1
-
+    
+    dobjFor(Take)
+    {
+        action()
+        {
+            inherited;
+            ticketAchievement.awardPointsOnce();
+        }   
+    }
 ;
 
 securityArea: Room 'Security Area' 'security area'
@@ -601,4 +615,105 @@ VerbRule(GoogleFor)
     verbPhrase = 'look/looking up (what) (in what)'
     missingQ = 'what do you want to google that on;what do you want to google'
     dobjReply = singleNoun
+;
+
+ticketAchievement: Achievement +10 "finding the plane ticket";
+boardingAchievement: Achievement +10 "boarding the plane";
+escapeAchievement: Achievement +10 "escaping Pablo Cortez";
+powerAchievement: Achievement +10 "cutting the power to the metal detector";
+securityAchievement: Achievement +10 "opening the security door";
+suitcaseAchievement: Achievement +15 "opening the suitcase";
+uniformAchievement: Achievement +10 "putting on the pilot's uniform";
+cockpitAchievement: Achievement +10 "entering the cockpit";
+flyingAchievement: Achievement +15 "flying the plane";
+
+
+TopHintMenu;
+
++ Goal 'Where can I find a plane ticket?'
+    [
+        'You don\'t have the wherewithal to buy one. ',
+        'But perhaps someone else may have mislaid theirs. ',
+        'If you hunt around a bit you may find it. ',
+        'Where might people go in an airport when awaiting a flight? ',
+        'Especially if they\'re a bit peckish. ',
+        'Have you visited the snack bar? ',
+        'Has anything been left lying around there? ',
+        'Try taking a closer look at that newspaper. '
+    ]
+    
+    openWhenSeen = angela
+    closeWhenAchieved = ticketAchievement
+;
+
++ Goal 'How do I get the ID Card through the metal detector?'
+    [
+        'Did you take a good look at the ID Card? ',
+        'Have you found it again after it was confiscated? ',
+        'If not, where do you think the other security guard may have taken it?
+        ',
+        'Might it have been left for its owner to collect? ',
+        'Might that be why it was left there in the first place? ',
+        'What might the magnetic stripe on the card do the metal detector? ',
+        'How closely have you examined the metal detector? ',
+        'What does the power cable leading to the metal detector suggest? ',
+        powerHint
+        
+    ]
+
+    openWhenRevealed = 'card-confiscated'
+    closeWhenAchieved = powerAchievement
+;
+
+++ powerHint: Hint 
+    'Might there be a way of cutting the power to the metal detector? '
+    [powerGoal]
+;
+
++ powerGoal: Goal 'How do I cut the power to the metal detector? '
+    [
+        'Which direction does the power cable lead in? ',
+        'What else lies in roughly that direction? ',
+        'What lies beyond the metal detector? ',
+        'Where might the power be controlled from? ',
+        maintenanceHint
+    ]
+    
+    closeWhenAchieved = powerAchievement
+;
+
+++ maintenanceHint: Hint
+    'What might the Maintenance Room be for? '
+    [maintenanceGoal]
+;
+
++ maintenanceGoal: Goal 'How do I open the door to the Maintenance Room?'
+    [
+        'What\'s preventing the door from being opened? ',
+        'Who might have the the key to it? ',
+        'What sort of places might such a person visit in his work? ',
+        'Where might he clean? ',
+        'Where might you find a bathroom or toilet? ',
+        'Could there be one aboard the plane? '    
+    ]
+    openWhenRevealed = 'maintenance-door-locked'
+    closeWhenSeen = maintenanceRoom
+;
+
++ Goal 'Where can I find the power switch for the metal detector?'
+    [
+        'Which room might you expect to find it in? ',
+        'What can you see in that room? ',
+        'You are looking in the Maintenance Room, aren\'t you? ',
+        'What might be in those cabinets? ',
+        'Where might someone hide the cabinet key? ',
+        'What\'s on top of the shorter cabinet? ',
+        'What might be under the pot plant? ',
+        'What\'s inside the shorter cabinet? '
+    ]
+    
+    openWhenTrue = maintenanceRoom.seen && gRevealed('card-confiscated') 
+    && (powerCable.examined || powerGoal.goalState == OpenGoal)
+    
+    closeWhenAchieved = powerAchievement
 ;

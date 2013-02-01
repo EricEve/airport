@@ -335,7 +335,9 @@ takeoff: Scene
                 reception committee, and then settle back in your seat, content
                 with a job well done. ";
                 
-                finishGameMsg(ftVictory, [finishOptionUndo]);
+                flyingAchievement.awardPointsOnce();
+                
+                finishGameMsg(ftVictory, [finishOptionUndo, finishOptionFullScore]);
             }
             else if(asi.airspeed > 90)
             {
@@ -372,7 +374,7 @@ takeoff: Scene
             know, but it seems a terribly destructive way to displose of a
             plane-load of hoodlums. ";
             
-            finishGameMsg(ftDeath, [finishOptionUndo]);
+            finishGameMsg(ftDeath, [finishOptionUndo, finishOptionFullScore]);
         }
             
         
@@ -390,7 +392,7 @@ takeoff: Scene
             sheds <<purely at random>> with predictably disastrous consequences.
             Fortunately, you won't be around to answer for your incompetence. ";
             
-            finishGameMsg(ftDeath, [finishOptionUndo]);
+            finishGameMsg(ftDeath, [finishOptionUndo, finishOptionFullScore]);
         }
         
         /* 

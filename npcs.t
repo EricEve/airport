@@ -179,6 +179,122 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
     suggestionKey = 'top'
 ;
 
++ TopicGroup 'top';
+
+++ AskTopic @angela
+    keyTopics = 'angela'
+    
+    name = 'herself'
+;
+
+++ QueryTopic 'when' 'this plane is going to leave; depart take off'
+    "<q>When is this plane going to leave?</q> you ask.\b
+    <q>Just as soon as the pilot comes aboard,</q> she tells you. <.reveal
+    pilot-awaited> "
+    
+    askMatchObj = tFlightDepartures
+;
+
+
+++ AskTopic @tPilot
+    "<q>What's happened to the pilot?</q> you ask.\b
+    <q>I don't know; we're still waiting for him,</q> she replies. <q>But don't
+    worry; I'm sure he'll turn up any moment now.</q> "
+
+    autoName = true
+    isActive = gRevealed('pilot-awaited')
+;
+
+
+
++ QueryTopic 'what' 'her name is; your'
+    "<q>What's your name?</q> you ask.\b
+    <q><<getActor.makeProper>>,</q> she replies. "
+    
+    isActive = !getActor.proper
+    
+    convKeys = 'angela'
+;
+
++ QueryTopic, StopEventList 'what' @tDoingTonight
+    [
+        '<q>What are you doing tonight?</q> you ask.\b
+        She cocks one eyebrow at you. <q>I have my plans,</q> she replies
+        vaguely. ',
+        
+        '<q>What <i>are</i> you doing tonight?</q> you insist.\b
+        <q>I don\'t think that\'s any of your business,</q> she replies, with
+        rather a bleak smile. <q>Do you?</q> <.convnode not-your-business>',
+        
+        '<q>About tonight...</q> you begin.\b
+        She cuts you off by pressing her lips together and raising her eyebrows
+        in a mildly disapproving manner, as if to say, <q>That topic is
+        closed.</q> '       
+    ]
+    
+    convKeys = 'angela'
+;
+
++ ConvNode 'not-your-business';
+
+++ YesTopic
+    "<q>As a matter of fact I do,</q> you reply boldly.\b
+    <q>In that case we shall have to agree to differ,</q> she replies, just a
+    little stiffly."     
+;
+
+++ NoTopic
+    "<q>No, I suppose not,</q> you concede.\b
+    <q>No; well, there you are then,</q> she remarks. "  
+;
+
++ QueryTopic 'when' 'this plane is going to leave; depart take off'
+    "<q>When is this plane going to leave?</q> you ask.\b
+    <q>Just as soon as the pilot comes aboard,</q> she tells you. <.reveal
+    pilot-awaited> "
+    
+    askMatchObj = tFlightDepartures
+;
+
++ DefaultAskForTopic
+    "{The subj angela} listens to your request and shakes her head. <q>Sorry, I
+    can't help you with that,</q> she says. "
+;
+    
++ DefaultCommandTopic
+    "<q><<if angela.proper>>Angela<<else>>Miss<<end>>, would you
+    <<actionPhrase>>, please?</q> you request.\b
+    In reply she merely cocks an eyebrow at you and looks at you as if to say,
+    <q>Who do you think you're talking to?</q> "
+;
+
+
++ DefaultAnyTopic
+    "{The subj angela} smiles and shrugs. "  
+;
+
++ DefaultGiveShowTopic
+    "You offer {the angela} {the dobj}, but she shakes her head and pushes {him
+    dobj} away, saying, <q>I'm afraid I can't accept {that dobj} from you,
+    sir.</q> "
+;
+
++ DefaultShowTopic
+    "You point towards {the dobj}.\b
+    <q>Very interesting, I'm sure, sir,</q> {the subj angela} remarks without
+    much enthusiasm. "
+    
+    isActive = gDobj.isFixed
+;
+
++ TopicGroup
+    isActive = getActor.curState == angelaSeatedState
+;
+
+++ DefaultAskQueryTopic
+    "<q>That question's too difficult for me!</q> she declares. "
+;
+
 + angelaGreetingState: ActorState
     isInitState = true
     specialDesc = "{The subj angela} {is} standing just inside the entrance
@@ -229,6 +345,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
         returns it to you. <q>Please move to the rear of the plane to find a
         seat.</q> ";
         angelaGreetingState.ticketSeen = true;
+        boardingAchievement.awardPointsOnce();
     }
 ;
     
@@ -686,118 +803,3 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
     }
 ;
 
-+ TopicGroup 'top';
-
-++ AskTopic @angela
-    keyTopics = 'angela'
-    
-    name = 'herself'
-;
-
-++ QueryTopic 'when' 'this plane is going to leave; depart take off'
-    "<q>When is this plane going to leave?</q> you ask.\b
-    <q>Just as soon as the pilot comes aboard,</q> she tells you. <.reveal
-    pilot-awaited> "
-    
-    askMatchObj = tFlightDepartures
-;
-
-
-++ AskTopic @tPilot
-    "<q>What's happened to the pilot?</q> you ask.\b
-    <q>I don't know; we're still waiting for him,</q> she replies. <q>But don't
-    worry; I'm sure he'll turn up any moment now.</q> "
-
-    autoName = true
-    isActive = gRevealed('pilot-awaited')
-;
-
-
-
-+ QueryTopic 'what' 'her name is; your'
-    "<q>What's your name?</q> you ask.\b
-    <q><<getActor.makeProper>>,</q> she replies. "
-    
-    isActive = !getActor.proper
-    
-    convKeys = 'angela'
-;
-
-+ QueryTopic, StopEventList 'what' @tDoingTonight
-    [
-        '<q>What are you doing tonight?</q> you ask.\b
-        She cocks one eyebrow at you. <q>I have my plans,</q> she replies
-        vaguely. ',
-        
-        '<q>What <i>are</i> you doing tonight?</q> you insist.\b
-        <q>I don\'t think that\'s any of your business,</q> she replies, with
-        rather a bleak smile. <q>Do you?</q> <.convnode not-your-business>',
-        
-        '<q>About tonight...</q> you begin.\b
-        She cuts you off by pressing her lips together and raising her eyebrows
-        in a mildly disapproving manner, as if to say, <q>That topic is
-        closed.</q> '       
-    ]
-    
-    convKeys = 'angela'
-;
-
-+ ConvNode 'not-your-business';
-
-++ YesTopic
-    "<q>As a matter of fact I do,</q> you reply boldly.\b
-    <q>In that case we shall have to agree to differ,</q> she replies, just a
-    little stiffly."     
-;
-
-++ NoTopic
-    "<q>No, I suppose not,</q> you concede.\b
-    <q>No; well, there you are then,</q> she remarks. "  
-;
-
-+ QueryTopic 'when' 'this plane is going to leave; depart take off'
-    "<q>When is this plane going to leave?</q> you ask.\b
-    <q>Just as soon as the pilot comes aboard,</q> she tells you. <.reveal
-    pilot-awaited> "
-    
-    askMatchObj = tFlightDepartures
-;
-
-+ DefaultAskForTopic
-    "{The subj angela} listens to your request and shakes her head. <q>Sorry, I
-    can't help you with that,</q> she says. "
-;
-    
-+ DefaultCommandTopic
-    "<q><<if angela.proper>>Angela<<else>>Miss<<end>>, would you
-    <<actionPhrase>>, please?</q> you request.\b
-    In reply she merely cocks an eyebrow at you and looks at you as if to say,
-    <q>Who do you think you're talking to?</q> "
-;
-
-
-+ DefaultAnyTopic
-    "{The subj angela} smiles and shrugs. "  
-;
-
-+ DefaultGiveShowTopic
-    "You offer {the angela} {the dobj}, but she shakes her head and pushes {him
-    dobj} away, saying, <q>I'm afraid I can't accept {that dobj} from you,
-    sir.</q> "
-;
-
-+ DefaultShowTopic
-    "You point towards {the dobj}.\b
-    <q>Very interesting, I'm sure, sir,</q> {the subj angela} remarks without
-    much enthusiasm. "
-    
-    isActive = gDobj.isFixed
-;
-
-+ TopicGroup
-    isActive = getActor.curState == angelaSeatedState
-;
-
-++ DefaultAskQueryTopic
-    "<q>That question's too difficult for me!</q> she declares. "
-;
