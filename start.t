@@ -231,7 +231,7 @@ concourse: Room 'Concourse' 'concourse; long; hallway'
 Doer 'put IDcard in cardslot'
     execAction(c)
     {
-        redirect(c, UnlockWith, dobj: securityDoor, iobj: IDcard);
+        doInstead(UnlockWith, securityDoor, IDcard);
     }
 ;
 
@@ -553,7 +553,7 @@ securityCentre: Room 'Security Centre' 'security centre'
         }
     }
     
-    isEnterOnable = true
+    canEnterOnMe = true
     
     dobjFor(EnterOn)
     {

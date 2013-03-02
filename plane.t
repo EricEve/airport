@@ -39,7 +39,7 @@ cockpit: Room 'Cockpit' 'cockpit'
 ;
 
 + controls: Fixture 'controls;; instruments;them'
-    "The instruments and controls of most immdiate interest to you are
+    "The instruments and controls of most immediate interest to you are
     <<makeListStr(contents, &theName)>>. "
     
     checkReach(actor)
