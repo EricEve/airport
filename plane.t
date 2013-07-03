@@ -22,6 +22,12 @@ cockpit: Room 'Cockpit' 'cockpit'
     out asExit(aft)
     
     regions = [planeRegion]
+    
+    travelerEntering(traveler, dest) 
+    {
+        if(traveler == gPlayerChar)
+            cockpitAchievement.awardPointsOnce();
+    }
 ;
 
 + cabinDoor: LockablePlaneDoor 'cabin door'
@@ -416,7 +422,7 @@ takeoff: Scene
 planeFront: Room 'Front of Plane' 'front[n] of the plane;;airplane aeroplane'
     "The main ailse comes to an end at the port exit of the plane, but continues
     aft past the seating. A little further forward is a door that <<unless
-      me.hasSeen(cockpit)>>presumably<<end>> leads into the cockpit. "
+      gPlayerChar.hasSeen(cockpit)>>presumably<<end>> leads into the cockpit. "
     
     fore = cockpitDoor
     north asExit(fore)
@@ -503,8 +509,8 @@ MultiLoc, Decoration 'seats; red; seating seat airline; them'
     "Like all airline seats, these ones look like they were designed for the
     average-sized person of a century and a half ago. "
     
-    notImportantMsg = '<<if takeover.isHappening>>You can\'t get at seats for
-        the press of passengers in the aisle<<else>>All the seats round here
+    notImportantMsg = '<<if takeover.isHappening>>You can\'t get at the seats
+        for the press of passengers in the aisle<<else>>All the seats round here
         seem to be taken, so you\'d best leave them alone<<end>>. '
     
     locationList = [planeFront, planeRear]
@@ -591,7 +597,7 @@ Doer 'go dir'
     }
     
     direction = [portDir, starboardDir, foreDir, aftDir]
-    when = (!me.isIn(planeRegion))
+    when = (!gPlayerChar.isIn(planeRegion))
 ;
 
 
@@ -625,7 +631,7 @@ takeover: Scene
         darkSuits.moveInto(nil);
     }
     
-    endsWhen = (uniform.wornBy == me)
+    endsWhen = (uniform.wornBy == gPlayerChar)
     
     whenEnding()
     {
@@ -646,7 +652,7 @@ criminalPassengers: Decoration 'passengers; smart dark of[prep]; men gangsters
     
     beforeTravel(traveler, connector)
     {
-        if(traveler == me && connector == planeRear)
+        if(traveler == gPlayerChar && connector == planeRear)
         {
             "You really don't want to call attention to yourself by walking past
             those passengers to the rear of the plane, since even the most

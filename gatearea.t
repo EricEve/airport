@@ -36,7 +36,9 @@ gateArea: Room 'Gate Area' 'gate area'
     RO 359 to Mexico City <FONT COLOR=RED>DELAYED</FONT>\n
     PZ 87 to Houston <FONT COLOR=RED>DELAYED</FONT>\n
     BU 4567 to Bogota <FONT COLOR=RED>DELAYED</FONT>"
-    
+ 
+    decorationActions = [Examine, GoTo, Read]
+    readDesc = desc
 ;
 
 
@@ -79,12 +81,19 @@ maintenanceRoom: Room 'Maintenance Room' 'maintenance room'
     
 ;
 
-++ powerSwitch: Fixture, Switch 'big red switch(-zz)'
+++ powerSwitch: Fixture, Switch 'big red switch{-zz}'
     "It's marked <q>Metal Detector</q> and is currently in the <<if isOn>>ON
     <<else>> OFF<<end>> position. "
     
     isOn = true
     subLocation = &remapIn
+    
+    makeOn(stat)
+    {
+        inherited(stat);
+        if(stat == nil)
+            powerAchievement.awardPointsOnce();
+    }
 ;
 
 ++ Decoration 'switches; other of[prep]; bank rows row; them'
@@ -188,7 +197,7 @@ jetway: Room 'Jetway' 'jetway;short enclosed; walkway'
     
     travelerEntering(traveler, dest) 
     {
-        if(traveler == me && takeover.isHappening)
+        if(traveler == gPlayerChar && takeover.isHappening)
             escapeAchievement.awardPointsOnce();
     }    
 ;
@@ -243,7 +252,7 @@ announcementObj: ShuffledEventList
     
     announce()
     {
-        if(!me.isIn(planeRegion))
+        if(!gPlayerChar.isIn(planeRegion))
            doScript();
     }
     

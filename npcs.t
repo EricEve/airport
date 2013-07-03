@@ -76,7 +76,7 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
     in a different context you might not realize quite what an evil devil he
     actually is. "
     
-    actorSpecialDesc = "Pablo Cortez<<first time>>, El Diabo's right-hand man,
+    actorSpecialDesc = "Pablo Cortez<<first time>>, El Dialbo's right-hand man,
         <<only>> is standing by the main exit, hurrying the passengers off the
         plane with muzzle of his machine-pistol. "
     
@@ -91,7 +91,7 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
     
     actorBeforeTravel(traveler, connector)
     {
-        if(traveler == me && connector == cockpitDoor)
+        if(traveler == gPlayerChar && connector == cockpitDoor)
         {
             "Cortez looks round at you suspiciously as you head for the cockpit
             door. <q>Hey, you, Pond!</q> he shouts. As you make a dash for the
@@ -127,7 +127,7 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
 ;
 
 + cortezTalkingAgenda: AgendaItem
-    isReady = (me.isIn(planeFront))
+    isReady = (gPlayerChar.isIn(planeFront))
     
     invokeItem()
     {
@@ -145,7 +145,7 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
     invokeItem()
     {
         isDone = true;
-        if(me.isIn(planeFront))
+        if(gPlayerChar.isIn(planeFront))
         {
             "Cortez suddenly looks your way. For a split-second he seems frozen
             with astonishment, but only for a split-second.\b
@@ -303,7 +303,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
     
     beforeTravel(traveler, connector)
     {
-        if(traveler == me)
+        if(traveler == gPlayerChar)
         {
             switch(connector)
             {
@@ -466,7 +466,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
 
 + ConvNode 'what-to-you';
     
-++ TellTopic @me    
+++ TellTopic @gPlayerChar    
     "<q>The name's Pond, Sherlock Pond,</q> you tell her. <q>I'm a British
     secret agent on the track of these villains!</q>\b
     <q>Indeed!</q> she replies with ill-disguised scepticism. <.inform agent>" 

@@ -22,7 +22,9 @@ gameMain: GameMainDef
     paraBrksBtwnSubcontents = nil
     
     showIntro()
-    {
+    {           
+//        "Kilroy {is|was} {here} and {is|was}n't too happy about it!\b";
+        
        "<font size=+2><b>Airport</b></font>\b
        They're out to get you. No, they really are --- <q>they</q> being the
        local drug barons. You've just got the evidence that will put them behind
@@ -30,7 +32,9 @@ gameMain: GameMainDef
        it while you still can, since El Diablo and his henchmen will be equally
        desperate to stop you --- for good. They've pursued you as far as the
        airport and now your only hope is to get the first plane out of here.\b";
-    }       
+    }     
+    
+    usePastTense = nil
 ;
 
 
@@ -57,7 +61,7 @@ terminal: Room 'Terminal' 'terminal'
  *   gameMain.initialPlayerChar accordingly.
  */
 
-+ me: Thing 'you'   
++ me: Actor 'you'   
     "Secret agents are normally meant to be well equipped, but your quick
     getaway just now meant you had to leave just about everything behind
     except what you're wearing, and that's not much. You couldn't even go back
@@ -204,20 +208,26 @@ concourse: Room 'Concourse' 'concourse; long; hallway'
         if(stat == nil)
         {
             makeOpen(true);
-            "The door pops open a fraction. ";
+            "The door pops open a fraction as it's unlocked. ";
         }
     }
     
     makeOpen(stat)
     {
         inherited(stat);
-        if(stat == nil)
+        if(stat == nil && !gAction.isImplicit)
         {
             makeLocked(true);
-            "You hear a slight click as the door locks itself again. ";
+            "You hear a slight click as the door locks itself when you close
+            it. ";            
         }
         
+        if(stat)
+            securityAchievement.awardPointsOnce();       
+        
     }
+    
+    
 ;
 
 + cardslot: Fixture 'card slot'  
@@ -233,6 +243,13 @@ Doer 'put IDcard in cardslot'
     {
         doInstead(UnlockWith, securityDoor, IDcard);
     }
+;
+
+Doer 'lock securityDoor; lock securityDoor with IDcard'
+    execAction(c)
+    {
+        doInstead(Close, securityDoor);
+    }    
 ;
 
 snackBar: Room 'Snack Bar' 'snack bar'
@@ -254,7 +271,7 @@ snackBar: Room 'Snack Bar' 'snack bar'
 + darkSuits: Decoration 'men[n] in[prep] dark suits; sinister senior; 
     lieutenants; them'    
     "Even to the untrained eye they'd probably look pretty sinister. To you they
-    look worse than that; you're pretty sure they're some of El Dialo's senior
+    look worse than that; you're pretty sure they're some of El Diablo's senior
     lieutenants. Fortunately they seem too absorbed in their own discussion at
     the other end of the room right now to notice you. "
     
@@ -377,6 +394,13 @@ lounge: Room 'Pilot\'s Lounge' 'pilot\'s lounge'
         bulkCapacity = 8
         indirectLockableMsg = 'You\'ll have to use the combination lock for
             that. '
+        
+        makeOpen(stat)
+        {
+            inherited(stat);
+            if(stat)
+                suitcaseAchievement.awardPointsOnce();
+        }
     }
 ;
     
@@ -437,7 +461,7 @@ lounge: Room 'Pilot\'s Lounge' 'pilot\'s lounge'
 
 ++ uniform: Wearable 'pilot\'s uniform; timo large'  
     "It's a uniform for a Timo Airlines pilot. It's a little large for you, but
-    <<if wornBy == me>> it's not too bad a f<<else>>you could probably wear
+    <<if wornBy == gPlayerChar>> it's not too bad a f<<else>>you could probably wear
     <<end>>it. "
     
     bulk = 6
@@ -450,6 +474,13 @@ lounge: Room 'Pilot\'s Lounge' 'pilot\'s lounge'
             "After going to all that trouble to get this uniform you're in no
             hurry to take it off. ";
         }
+    }
+    
+    makeWorn(stat)
+    {
+        inherited(stat);
+        if(stat)
+            uniformAchievement.awardPointsOnce();
     }
 ;
 
@@ -717,3 +748,138 @@ TopHintMenu;
     
     closeWhenAchieved = powerAchievement
 ;
+
+
+//CustomMessages
+//    messages = [
+//       Msg(currently no hints, 'You\'re too soon for hints! ')
+//    ]    
+//;
+
+#ifdef __DEBUG    
+foo: Test 'foo' ['x me', 'i']
+    
+;
+
+bar: Test
+    testName = 'bar'
+    testList =
+    [
+        'look',
+        'listen'
+    ]
+;
+
+allTest: Test
+    testName = 'all'
+    testList =
+    [
+        'test foo',
+        'test bar'
+    ]
+; 
+
+Test 'uniform' ['wear uniform'] [uniform] @gate1;
+#endif
+
+
+//VerbRule(Order)     
+//    ('order'  ('a' | 'an' | 'the' | 'some' |) literalDobj)
+//   : VerbProduction
+//   verbPhrase = 'order/ordering (what)'
+//   action = Order
+//   missingQ = 'what do you want to order'
+//;
+//
+//VerbRule(OrderThing) 'orderthing' singleDobj : VerbProduction
+//   verbPhrase = 'order/ordering (what)'
+//   action = OrderThing
+//   missingQ = 'what do you want to order'
+//;
+//
+////DefineLiteralAction(Order)
+////    execAction(cmd) {
+////
+////        switch(gLiteral.toLower) {
+////        case 'food':
+////        case 'some food':
+////            "I wasn't hungry, but I was in the mood for a drink. ";
+////            break;
+////        case 'drink':
+////        case 'a drink':
+////            if (!client.arrives)
+////                "I was originally going to help myself to a Mr. Pibb, but you
+////                know what? Let's party; I got myself a Pibb Extra. ";
+////            else
+////                "I only needed one drink. ";
+////            break;
+////        default:
+////            
+////            Parser.parse('orderthing ' + gLiteral.toLower);
+////            break;
+////      }
+////   }
+////;
+//
+//DefineTAction(OrderThing)
+//   includeInUndo = nil
+//   actionTime = 0
+//;
+//
+//modify Thing
+//   dobjFor(OrderThing) 
+//        { verify() { illogical('{I} {aren\'t} sure how to do that. '); } }
+// 
+//;
+//
+
+//VerbRule(Order)
+//    'order' topicDobj
+//    : VerbProduction
+//    action = Order
+//    verbPhrase = 'order/ordering (what)'
+//    missingQ = 'What do you want to order'
+//;
+//
+//DefineTopicAction(Order)
+//    execAction(cmd)
+//    {
+//        local topic; 
+//        
+//        if(cmd.dobj.ofKind(ResolvedTopic))
+//            topic = cmd.dobj.topicList[1];
+//        else
+//            topic = cmd.dobj;
+//        
+//        switch(topic)
+//        {
+//        case tFood:
+//             "I wasn't hungry, but I was in the mood for a drink. ";
+//            break;
+//            
+//        case tDrink:
+//            if (!client.arrives)
+//                "I was originally going to help myself to a Mr. Pibb, but you
+//                know what? Let's party; I got myself a Pibb Extra. ";
+//            else
+//                "I only needed one drink. ";
+//            break;
+//            
+//        default:
+//            if(Q.scopeList(gActor).toList().indexOf(topic) == nil)
+//                "{I} {see} no <<topic.name>> here. ";
+//            else
+//                "{I} {aren\'t} sure how to do that. ";
+//                
+//            
+//        }
+//    }
+//;
+//
+//tDrink: Topic 'drink';
+//tFood: Topic 'food; some';
+//                  
+//    
+//    
+//    
+//client: object arrives = nil;
