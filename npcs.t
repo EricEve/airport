@@ -99,6 +99,13 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
             bullets. ";
             finishGameMsg(ftDeath, [finishOptionUndo]);
         }
+        else if (traveler == gPlayerChar && connector == planeRear) 
+        {
+            "Your makeshift disguise won't fool Cortez for long; it's best
+            to leave the plane as quickly as possible. ";
+            exit;
+        }
+        
     }
 ;
 
@@ -566,8 +573,8 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
         '<q>What are your plans for tonight now?</q> you ask.\b
         <q>I\'m not sure,</q> she replies, just a little nervously. <q>I think
         I\'d rather wait until this plane has safely landed at its destination
-        and -- well, you know.</q> She indicates the new set of passengers witha
-        flick of her eyes. <q>I think I\'d rather wait until this is all over
+        and -- well, you know.</q> She indicates the new set of passengers with
+        a flick of her eyes. <q>I think I\'d rather wait until this is all over
         before making any further plans.</q> ',
         
         '<q>About later tonight...</q> you begin.\b
@@ -596,14 +603,14 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
         not be the best time to talk about that,</q> she concludes. ',
         
         '<q>Hm,</q> she says, <q>right.</q> It\'s obviously intended as a
-        non-answer, perhaps because she\'s worried about who else might here
+        non-answer, perhaps because she\'s worried about who else might hear
         what she says. '       
     ]
 ;
 
 ++ DefaultSayTellTalkTopic
     "{The subj angela} merely listens, looking faintly disapproving at your
-    garrulouslness. "
+    garrulousness. "
 ;
     
     
@@ -639,7 +646,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
     {
         isDone = true;
         "{The subj angela} looks up at you sharply and frowns. <q>Hey! You're
-        one the the passengers, aren't you?</q> she remarks. <q>I remember
+        one of the the passengers, aren't you?</q> she remarks. <q>I remember
         looking at your ticket! You certainly aren't our pilot. What are you
         doing in that uniform?</q><.convnodet uniform> ";
         
@@ -658,7 +665,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
 ;
 
 ++ SayTopic 'you have a pilot\'s license; i'
-    "<q>It's quite all right, I have a pilot\'s license,</q> you assure you.\b
+    "<q>It's quite all right, I have a pilot's license,</q> you assure her.\b
     <q>Yes, but...</q> she begins. <q>Do you actually mean to say you intend to
     fly this plane?</q> <.convnodet intend-fly> "
     
@@ -705,7 +712,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
         {
         case endConvBye:
             "<q>Oh no, you're not avoiding my question like that!</q> she tells
-            you. <q>Tell me, why are you wearing that pilot's uniform?</q>";
+            you. <q>Tell me, why are you wearing that pilot's uniform?</q> ";
             return blockEndConv;
         case endConvLeave:
             "<q>You're not going anywhere until you tell me what you're doing in
@@ -762,11 +769,11 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
         {
         case endConvBye:
             "<q>That's not an answer!</q> she complains. <q>Tell me, are
-            you proposing to fly this plane yourself?</q>";
+            you proposing to fly this plane yourself?</q> ";
             return blockEndConv;
         case endConvLeave:
             "<q>Don't walk off until you've told me whether you're proposing to
-            fly this plane, </q> {the subj angela} insists. <q>Well, are
+            fly this plane,</q> {the subj angela} insists. <q>Well, are
             you?</q> ";
             return blockEndConv;
         default:

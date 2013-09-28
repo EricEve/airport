@@ -480,11 +480,13 @@ planeRear: Room 'Rear of Plane' 'rear[n] of the plane;;airplane aeroplane'
             }
         }
         
-        travelDesc = "Clutching the bucket and the garbage bag in such a way to
-            hide as much as yourself as possible, you push your way through the
-            passengers milling in the aisle, hoping to avoid Pablo Cortez's
-            eye. If he catches you, you'll be dead before you can say <q>funeral
-            expenses</q>! " 
+        travelDesc = "<<if takeover.isHappening>>Clutching the bucket and the
+            garbage bag in such a way to hide as much as yourself as possible,
+            you push your way through the passengers milling in the aisle,
+            hoping to avoid Pablo Cortez's eye. If he catches you, you'll be
+            dead before you can say <q>funeral expenses</q>! <<else>>Ignoring
+            the passengers seated either side of the aisle, you return to the
+            front of the plane. <<end>>" 
         
         cleanerItemCount(traveler)
         {
@@ -527,7 +529,8 @@ airlinePassengers: MultiLoc, Decoration 'passengers;;men women; them'
     locationList = [planeFront, planeRear]
     
     specialDesc = "The aisle is full of passengers trying to leave their seats,
-        retrieve their luggage, and make their way to the front of the plane. "
+        retrieve their luggage, and make their way to the <<if
+          me.isIn(planeRear)>> front of the plane<<else>>exit<<end>>. "
     
     useSpecialDesc = (takeover.isHappening)  
     
@@ -606,12 +609,14 @@ class PlaneDoor: Door
     lockability = indirectLockable
     indirectLockableMsg = 'It looks like this door can only be locked and
         unlocked from the other side. '
+    isLocked = nil
 ;
 
 class LockablePlaneDoor: Door
     desc = "It's currently <<if isOpen>>open<<else>>closed and <<if isLocked>>
         locked<<else>>unlocked<<end>><<end>>. "
     lockability = lockableWithoutKey
+    isLocked = nil
 ;
 
 takeover: Scene

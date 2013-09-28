@@ -320,7 +320,7 @@ snackBar: Room 'Snack Bar' 'snack bar'
         if(hiddenIn.length > 0)
         {
             "As you pick up the newspaper <<list of hiddenIn>> {prev} {falls}
-            out of it and {lands} on the floor. ";
+            out of it and land{s/ed} on the floor. ";
             
             moveHidden(&hiddenIn, getOutermostRoom);
         }
@@ -590,7 +590,10 @@ securityCentre: Room 'Security Centre' 'security centre'
     {
         check()
         {
-            if(passwordEntered)
+            if(!isOn)
+                "You can't do that until the computer is switched on. ";
+            
+            else if(passwordEntered)
                 "You've already entered the password; this is no time to start
                 playing around with random commands. ";
         }
