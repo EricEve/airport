@@ -9,7 +9,7 @@ guard: Actor 'security guard; burly flab; man; him' @securityGate
     actorSpecialDesc = "A security guard stands by the metal detector, eyeing
         you suspiciously. "
     
-    shouldNotAttackMsg = 'With your training you could probably overpower him
+    checkAttackMsg = 'With your training you could probably overpower him
         easily enough, although he\'s armed and you\'re not, but that would
         probably result all the other airport security staff coming after you,
         which is a complication you could do without right now. '
@@ -80,7 +80,7 @@ cortez: Actor 'Pablo Cortez; evil latinate;man;him'
         <<only>> is standing by the main exit, hurrying the passengers off the
         plane with muzzle of his machine-pistol. "
     
-    shouldNotAttackMsg = 'You know better than to attempt it; he\'s known to be
+    checkAttackMsg = 'You know better than to attempt it; he\'s known to be
         quite deadly with that gun. '
     
     cannotTakeFromActorMsg(obj)
@@ -172,7 +172,7 @@ angela: Actor 'flight attendant; statuesque young; woman angela; her'
     @planeFront
     "She's a statuesque and by no means unattractive young woman. "
     
-    shouldNotAttackMsg = 'That would be cruel and unnecessary. '
+    checkAttackMsg = 'That would be cruel and unnecessary. '
     
     globalParamName = 'angela'
     
