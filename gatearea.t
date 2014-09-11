@@ -239,7 +239,7 @@ announcementObj: ShuffledEventList
             daemonID = new Daemon(self, &announce, 1);       
     }
     
-    stop()
+    stopDaemon()
     {
         if(daemonID != nil)
         {

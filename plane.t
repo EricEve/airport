@@ -631,7 +631,7 @@ takeover: Scene
         The announcement is immediately greeted by a chorus of groans from the
         cabin. ";   
         
-        announcementObj.stop();
+        announcementObj.stopDaemon();
         disembarkingPassengers.moveInto(jetway);
         darkSuits.moveInto(nil);
     }
